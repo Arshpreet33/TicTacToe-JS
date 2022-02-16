@@ -1,0 +1,106 @@
+<html>
+
+<head>
+    <title>Stopwatch</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- <script type="text/javascript" src="index.js"></script> -->
+
+</head>
+
+<body>
+
+    <h1>This is a Tic Tac Toe game</h1>
+
+    <br>
+
+    <div>
+        <input type="button" id='reset' value="Reset">
+    </div>
+
+    <br>
+
+    <div>
+        <p>Winner will be shown here...</p>
+    </div>
+
+    <br>
+
+    <table>
+        <tr style="border-top: 0px; margin:0px;">
+            <td style="height: 50px;width: 50px; border: 1px solid black;border-left: 0px;border-top: 0px;"
+                class='boxes' id='00'></td>
+            <td style="height: 50px;width: 50px; border: 1px solid black;border-top: 0px; " class='boxes' id='01'></td>
+            <td style="height: 50px;width: 50px; border: 1px solid black;border-right: 0px;border-top: 0px; "
+                class='boxes' id='02'></td>
+        </tr>
+        <tr>
+            <td style="height: 50px;width: 50px; border: 1px solid black;border-left: 0px;" class='boxes' id='10'></td>
+            <td style="height: 50px;width: 50px; border: 1px solid black;" class='boxes' id='11'></td>
+            <td style="height: 50px;width: 50px; border: 1px solid black;border-right: 0px;" class='boxes' id='12'></td>
+        </tr>
+        <tr style="border-bottom: 0px;">
+            <td style="height: 50px;width: 50px; border: 1px solid black;border-left: 0px;border-bottom: 0px;"
+                class='boxes' id='20'></td>
+            <td style="height: 50px;width: 50px; border: 1px solid black;border-bottom: 0px;" class='boxes' id='21'>
+            </td>
+            <td style="height: 50px;width: 50px; border: 1px solid black;border-right: 0px;border-bottom: 0px;"
+                class='boxes' id='22'></td>
+        </tr>
+    </table>
+
+    <script>
+
+        $('document').ready(function () {
+
+
+            var matrix = [[null, null, null], [null, null, null], [null, null, null]]
+            turn = 'X'
+
+            function checkMatchWin(player, x, y) {
+                if (matrix[x][0] == player && matrix[x][1] == player && matrix[x][2] == player) {
+                    return true
+                }
+                if (matrix[0][y] == player && matrix[1][y] == player && matrix[2][y] == player) {
+                    return true
+                }
+                if (x == y) {
+                    if (matrix[0][0] == player && matrix[1][1] == player && matrix[2][2] == player) {
+                        return true
+                    }
+                    if (matrix[0][2] == player && matrix[1][1] == player && matrix[2][0] == player) {
+                        return true
+                    }
+                }
+            }
+
+            function insertValue(x, y) {
+                document.getElementById('' + x + '' + y).innerHTML = turn
+                matrix[x][y] = turn
+
+                var p = document.getElementsByTagName('p')[0]
+                if (checkMatchWin(turn, x, y)) {
+                    document.getElementsByTagName('p')[0].innerHTML = 'Player ' + turn + ' wins!!!! Please click Reset to Continue'
+                    return
+                }
+
+                if (turn == 'X') turn = '0'
+                else turn = 'X'
+            }
+
+            $('#reset').click(function () {
+                matrix = [[null, null, null], [null, null, null], [null, null, null]]
+                $('.boxes').text('')
+                document.getElementsByTagName('p')[0].innerHTML = 'Winner will be shown here...'
+            })
+
+            $('.boxes').click(function () {
+                insertValue(this.id[0], this.id[1])
+            })
+
+        })
+
+    </script>
+</body>
+
+</html>
