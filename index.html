@@ -21,33 +21,56 @@
     <br>
 
     <div>
-        <p>Winner will be shown here...</p>
+        <div style="
+        display: inline-block;
+        left: 50px;
+        position: relative;
+    ">
+            <table style="
+            text-align: center;
+            font-size: 50px;
+        ">
+                <tr style="border-top: 0px; margin:0px;">
+                    <td style="height: 100px;width: 100px; border: 1px solid black;border-left: 0px;border-top: 0px;"
+                        class='boxes' id='00'></td>
+                    <td style="height: 100px;width: 100px; border: 1px solid black;border-top: 0px; " class='boxes'
+                        id='01'>
+                    </td>
+                    <td style="height: 100px;width: 100px; border: 1px solid black;border-right: 0px;border-top: 0px; "
+                        class='boxes' id='02'></td>
+                </tr>
+                <tr>
+                    <td style="height: 100px;width: 100px; border: 1px solid black;border-left: 0px;" class='boxes'
+                        id='10'>
+                    </td>
+                    <td style="height: 100px;width: 100px; border: 1px solid black;" class='boxes' id='11'></td>
+                    <td style="height: 100px;width: 100px; border: 1px solid black;border-right: 0px;" class='boxes'
+                        id='12'>
+                    </td>
+                </tr>
+                <tr style="border-bottom: 0px;">
+                    <td style="height: 100px;width: 100px; border: 1px solid black;border-left: 0px;border-bottom: 0px;"
+                        class='boxes' id='20'></td>
+                    <td style="height: 100px;width: 100px; border: 1px solid black;border-bottom: 0px;" class='boxes'
+                        id='21'>
+                    </td>
+                    <td style="height: 100px;width: 100px; border: 1px solid black;border-right: 0px;border-bottom: 0px;"
+                        class='boxes' id='22'></td>
+                </tr>
+            </table>
+        </div>
+
+        <div style="
+        display: inline-block;
+        vertical-align: top;
+        left: 100px;
+        position: relative;
+    ">
+            <p style="display:inline-block;">Game starts with X..!!! Winner will be shown here...</p>
+        </div>
     </div>
 
     <br>
-
-    <table>
-        <tr style="border-top: 0px; margin:0px;">
-            <td style="height: 50px;width: 50px; border: 1px solid black;border-left: 0px;border-top: 0px;"
-                class='boxes' id='00'></td>
-            <td style="height: 50px;width: 50px; border: 1px solid black;border-top: 0px; " class='boxes' id='01'></td>
-            <td style="height: 50px;width: 50px; border: 1px solid black;border-right: 0px;border-top: 0px; "
-                class='boxes' id='02'></td>
-        </tr>
-        <tr>
-            <td style="height: 50px;width: 50px; border: 1px solid black;border-left: 0px;" class='boxes' id='10'></td>
-            <td style="height: 50px;width: 50px; border: 1px solid black;" class='boxes' id='11'></td>
-            <td style="height: 50px;width: 50px; border: 1px solid black;border-right: 0px;" class='boxes' id='12'></td>
-        </tr>
-        <tr style="border-bottom: 0px;">
-            <td style="height: 50px;width: 50px; border: 1px solid black;border-left: 0px;border-bottom: 0px;"
-                class='boxes' id='20'></td>
-            <td style="height: 50px;width: 50px; border: 1px solid black;border-bottom: 0px;" class='boxes' id='21'>
-            </td>
-            <td style="height: 50px;width: 50px; border: 1px solid black;border-right: 0px;border-bottom: 0px;"
-                class='boxes' id='22'></td>
-        </tr>
-    </table>
 
     <script>
 
@@ -55,7 +78,9 @@
 
 
             var matrix = [[null, null, null], [null, null, null], [null, null, null]]
-            turn = 'X'
+            var turn = 'X'
+            var counter = 0
+            var gameFinished
 
             function checkMatchWin(player, x, y) {
                 if (matrix[x][0] == player && matrix[x][1] == player && matrix[x][2] == player) {
@@ -64,7 +89,7 @@
                 if (matrix[0][y] == player && matrix[1][y] == player && matrix[2][y] == player) {
                     return true
                 }
-                if (x == y) {
+                if (x == y || (x == 2 && y == 0) || (x == 0 && y == 2)) {
                     if (matrix[0][0] == player && matrix[1][1] == player && matrix[2][2] == player) {
                         return true
                     }
@@ -75,23 +100,36 @@
             }
 
             function insertValue(x, y) {
+
+                if (gameFinished) return
+
                 document.getElementById('' + x + '' + y).innerHTML = turn
                 matrix[x][y] = turn
 
                 var p = document.getElementsByTagName('p')[0]
                 if (checkMatchWin(turn, x, y)) {
                     document.getElementsByTagName('p')[0].innerHTML = 'Player ' + turn + ' wins!!!! Please click Reset to Continue'
+                    gameFinished = 1
                     return
                 }
 
                 if (turn == 'X') turn = '0'
                 else turn = 'X'
+
+                if (++counter >= 9) {
+                    document.getElementsByTagName('p')[0].innerHTML = 'Match Drawn!!!! Please click Reset to Continue'
+                    gameFinished = 1
+                    return
+                }
             }
 
             $('#reset').click(function () {
                 matrix = [[null, null, null], [null, null, null], [null, null, null]]
                 $('.boxes').text('')
-                document.getElementsByTagName('p')[0].innerHTML = 'Winner will be shown here...'
+                gameFinished = null
+                counter = 0
+                turn = 'X'
+                document.getElementsByTagName('p')[0].innerHTML = 'Game starts with X..!!! Winner will be shown here...'
             })
 
             $('.boxes').click(function () {
